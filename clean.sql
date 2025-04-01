@@ -72,4 +72,19 @@ CAST(itunes_movies.raw_json->>2 AS INT) AS points,
 (itunes_movies.added_at) AS date_scraped
 FROM itunes_movies
 WHERE itunes_movies.raw_json IS NOT NULL;
+
+INSERT INTO Google_Movie_Rankings(rank, title, points, date_scraped)
+SELECT DISTINCT ON (google_movies.raw_json ->>1, google_movies.added_at)
+(google_movies.raw_json->>0) AS rank,
+(google_movies.raw_json->>1) AS title,
+CAST(google_movies.raw_json->>2 AS INT) AS points,
+(google_movies.added_at) AS date_scraped
+FROM google_movies
+WHERE google_movies.raw_json IS NOT NULL;
+
+
+
+
+
+
 COMMIT;
