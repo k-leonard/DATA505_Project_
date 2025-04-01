@@ -36,4 +36,13 @@ CAST(amazon_movies.raw_json->>2 AS INT) AS points,
 FROM amazon_movies
 WHERE amazon_movies.raw_json IS NOT NULL;
 
+INSERT INTO Paramount_Movie_Rankings(rank, title, points, date_scraped)
+SELECT DISTINCT ON (paramount_movies.raw_json ->>1, paramount_movies.added_at)
+(paramount_movies.raw_json->>0) AS rank,
+(paramount_movies.raw_json->>1) AS title,
+CAST(paramount_movies.raw_json->>2 AS INT) AS points,
+(paramount_movies.added_at) AS date_scraped
+FROM paramount_movies
+WHERE paramount_movies.raw_json IS NOT NULL;
+
 COMMIT;
