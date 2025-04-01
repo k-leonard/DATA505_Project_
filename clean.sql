@@ -64,4 +64,12 @@ CAST(amazon2_movies.raw_json->>2 AS INT) AS points,
 FROM amazon2_movies
 WHERE amazon2_movies.raw_json IS NOT NULL;
 
+INSERT INTO itunes_Movie_Rankings(rank, title, points, date_scraped)
+SELECT DISTINCT ON (itunes_movies.raw_json ->>1, itunes_movies.added_at)
+(itunes_movies.raw_json->>0) AS rank,
+(itunes_movies.raw_json->>1) AS title,
+CAST(itunes_movies.raw_json->>2 AS INT) AS points,
+(itunes_movies.added_at) AS date_scraped
+FROM itunes_movies
+WHERE itunes_movies.raw_json IS NOT NULL;
 COMMIT;
