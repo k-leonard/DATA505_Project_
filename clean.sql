@@ -18,4 +18,13 @@ CAST(hbo_movies.raw_json->>2 AS INT) AS points,
 FROM hbo_movies
 WHERE hbo_movies.raw_json IS NOT NULL;
 
+INSERT INTO Disney_Movie_Rankings(rank, title, points, date_scraped)
+SELECT DISTINCT ON (disney_movies.raw_json ->>1, disney_movies.added_at)
+(disney_movies.raw_json->>0) AS rank,
+(disney_movies.raw_json->>1) AS title,
+CAST(disney_movies.raw_json->>2 AS INT) AS points,
+(disney_movies.added_at) AS date_scraped
+FROM disney_movies
+WHERE disney_movies.raw_json IS NOT NULL;
+
 COMMIT;
